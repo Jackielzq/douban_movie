@@ -5,7 +5,7 @@ import json
 import re
 
 #初始化变量
-list_url = 'https://movie.douban.com/j/search_subjects?type=movie&tag=%E8%B1%86%E7%93%A3%E9%AB%98%E5%88%86&sort=rank&page_limit=200&page_start=0'
+list_url = 'https://movie.douban.com/j/search_subjects?type=movie&tag=%E8%B1%86%E7%93%A3%E9%AB%98%E5%88%86&sort=rank&page_limit=500&page_start=0'
 url = 'https://movie.douban.com/subject/1292052/?tag=%E8%B1%86%E7%93%A3%E9%AB%98%E5%88%86&from=gaia_video'
 
 
@@ -45,9 +45,12 @@ def get_movie_info(url):           #获取具体某一电影的详细信息
         movie_info['type'].append(i.text)
 
     movie_info['runtime'] = soup.select('#info [property="v:runtime"]')[0].text                  #时长
-
-    movie_info['launch_time'] = soup.select('#info [property="v:initialReleaseDate"]')[0].text   #上映日期
-
+  
+    if soup.select('#info [property="v:initialReleaseDate"]'):
+        movie_info['launch_time'] = soup.select('#info [property="v:initialReleaseDate"]')[0].text   #上映日期
+    else:
+        movie_info['launch_time'] = '无'
+        
     county_pattern = re.compile(r'<span class="pl">制片国家/地区:</span>(.*)<br/>')              #国家
     movie_info['country'] = re.findall(county_pattern,str(soup))[0].strip()                      #没有标签包围，用正则式提取
 
@@ -88,5 +91,5 @@ def merge_movie_info(df):
 df = get_movie_list(list_url)                           #获取豆瓣排名前200电影列表
 info_data = merge_movie_info(df)                         #根据每个电影ID获取每个电影的详细信息
 info_data_df = pd.DataFrame(info_data)
-info_data_df.to_csv('douban_movie_top200.csv')
+info_data_df.to_csv('douban_movie_top500.csv')
 print('数据加载完成')
