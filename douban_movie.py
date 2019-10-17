@@ -46,7 +46,7 @@ def get_movie_info(url):           #获取具体某一电影的详细信息
 
     movie_info['runtime'] = soup.select('#info [property="v:runtime"]')[0].text                  #时长
   
-    movie_info['launch_time'] = soup.select('#info [property="v:initialReleaseDate"]')[0].text if  ('#info [property="v:initialReleaseDate"]') else '无'   #上映日期
+    movie_info['launch_time'] = soup.select('#info [property="v:initialReleaseDate"]')[0].text if  soup.select('#info [property="v:initialReleaseDate"]') else '无'   #上映日期
         
     county_pattern = re.compile(r'<span class="pl">制片国家/地区:</span>(.*)<br/>')              #国家
     movie_info['country'] = re.findall(county_pattern,str(soup))[0].strip()                      #没有标签包围，用正则式提取
