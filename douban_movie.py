@@ -32,7 +32,7 @@ def get_movie_info(url):           #获取具体某一电影的详细信息
     movie_info = {}
 
     #获取详细字段
-    movie_info['director'] = soup.select('#info a[rel="v:directedBy"]')[0].text                  #导演
+    movie_info['director'] = soup.select('#info [rel="v:directedBy"]')[0].text                  #导演
     movie_info['scriptwriter'] = content[5].text.strip().split('/')                              #编剧
     movie_info_actor = soup.select('#info [rel="v:starring"]')                                   #演员，多个演员，需获取列表
     movie_info['actor']= [] 
